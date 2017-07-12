@@ -15016,6 +15016,15 @@ public class JsCodegenBoxTestGenerated extends AbstractJsCodegenBoxTest {
                 throw new AssertionError("Looks like this test can be unmuted. Remove IGNORE_BACKEND directive for that.");
             }
 
+            @TestMetadata("compiler/testData/codegen/box/properties/lateinit/isInitializedAndDeinitialize")
+            @TestDataPath("$PROJECT_ROOT")
+            @RunWith(JUnit3RunnerWithInners.class)
+            public static class IsInitializedAndDeinitialize extends AbstractJsCodegenBoxTest {
+                public void testAllFilesPresentInIsInitializedAndDeinitialize() throws Exception {
+                    KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/codegen/box/properties/lateinit/isInitializedAndDeinitialize"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.JS, true);
+                }
+            }
+
             @TestMetadata("compiler/testData/codegen/box/properties/lateinit/local")
             @TestDataPath("$PROJECT_ROOT")
             @RunWith(JUnit3RunnerWithInners.class)
