@@ -20,6 +20,8 @@ import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.js.translate.context.TranslationContext
 import org.jetbrains.kotlin.js.translate.declaration.ClassTranslator
 import org.jetbrains.kotlin.js.translate.extensions.JsSyntheticTranslateExtension
+import org.jetbrains.kotlin.psi.KtPureClassOrObject
+import org.jetbrains.kotlinx.serialization.compiler.backend.js.SerializerJsTranslator
 
 /**
  *  @author Leonid Startsev
@@ -27,7 +29,7 @@ import org.jetbrains.kotlin.js.translate.extensions.JsSyntheticTranslateExtensio
  */
 
 class SerializationJsExtension: JsSyntheticTranslateExtension {
-    override fun generateClassSyntheticParts(descriptor: ClassDescriptor, translator: ClassTranslator, context: TranslationContext) {
-//        TODO("js serialization not implemented for $descriptor")
+    override fun generateClassSyntheticParts(declaration: KtPureClassOrObject, descriptor: ClassDescriptor, translator: ClassTranslator, context: TranslationContext) {
+        SerializerJsTranslator.translate(declaration, descriptor, translator, context)
     }
 }
