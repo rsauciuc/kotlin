@@ -205,6 +205,8 @@ private fun configureFacetByGradleModule(
         adjustClasspath(kotlinFacet, dependencyClasspath)
     }
 
+    kotlinFacet.configuration.settings.implementedModuleName = moduleNode.implements
+
     return kotlinFacet
 }
 
