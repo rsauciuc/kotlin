@@ -37,6 +37,7 @@ import org.jetbrains.kotlinx.serialization.compiler.backend.common.annotationVar
 import org.jetbrains.kotlinx.serialization.compiler.backend.common.findTypeSerializer
 import org.jetbrains.kotlinx.serialization.compiler.backend.common.getSerialTypeInfo
 import org.jetbrains.kotlinx.serialization.compiler.backend.jvm.enumSerializerId
+import org.jetbrains.kotlinx.serialization.compiler.backend.jvm.referenceArraySerializerId
 import org.jetbrains.kotlinx.serialization.compiler.resolve.*
 
 class SerializerJsTranslator(declaration: KtPureClassOrObject,
@@ -158,13 +159,15 @@ class SerializerJsTranslator(declaration: KtPureClassOrObject,
             return getQualifiedClassReferenceName(serializerClass)
         }
         else {
-            val args = if (enumSerializerId == serializerClass.classId)
+            var args = if (serializerClass.classId == enumSerializerId)
                 listOf(createGetKClassExpression(kType.toClassDescriptor!!))
             else kType.arguments.map {
                 val argSer = findTypeSerializer(module, it.type) ?: return null
                 val expr = serializerInstance(argSer, module, it.type) ?: return null
                 if (it.type.isMarkedNullable) JsNew(nullableSerClass, listOf(expr)) else expr
             }
+            if (serializerClass.classId == referenceArraySerializerId)
+               args = listOf(createGetKClassExpression(kType.arguments[0].type.toClassDescriptor!!)) + args
             return JsNew(getQualifiedClassReferenceName(serializerClass), args)
         }
     }
