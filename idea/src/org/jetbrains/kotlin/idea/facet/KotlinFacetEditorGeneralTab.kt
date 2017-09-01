@@ -209,6 +209,7 @@ class KotlinFacetEditorGeneralTab(
     private val coroutineValidator = ArgumentConsistencyValidator()
 
     private var enableValidation = false
+    private var restrictByLibVersion = true
 
     init {
         libraryValidator = FrameworkLibraryValidatorWithDynamicDescription(
@@ -243,10 +244,15 @@ class KotlinFacetEditorGeneralTab(
 
     private fun restrictAPIVersions() {
         with(editor.compilerConfigurable) {
-            val targetPlatform = editor.targetPlatformComboBox.selectedItem as TargetPlatformKind<*>?
-            val libraryLevel = getLibraryLanguageLevel(editorContext.module, editorContext.rootModel, targetPlatform)
-            val versionUpperBound = minOf(selectedLanguageVersion, libraryLevel)
-            restrictAPIVersions(versionUpperBound)
+            if (restrictByLibVersion) {
+                val targetPlatform = editor.targetPlatformComboBox.selectedItem as TargetPlatformKind<*>?
+                val libraryLevel = getLibraryLanguageLevel(editorContext.module, editorContext.rootModel, targetPlatform)
+                val versionUpperBound = minOf(selectedLanguageVersion, libraryLevel)
+                restrictAPIVersions(versionUpperBound)
+            }
+            else {
+                restrictAPIVersions(selectedLanguageVersion)
+            }
         }
     }
 
@@ -289,10 +295,12 @@ class KotlinFacetEditorGeneralTab(
 
     override fun reset() {
         validateOnce {
+            restrictByLibVersion = false
             editor.useProjectSettingsCheckBox.isSelected = configuration.settings.useProjectSettings
             editor.targetPlatformComboBox.selectedItem = configuration.settings.targetPlatformKind
             editor.compilerConfigurable.reset()
             editor.updateCompilerConfigurable()
+            restrictByLibVersion = true
         }
     }
 
