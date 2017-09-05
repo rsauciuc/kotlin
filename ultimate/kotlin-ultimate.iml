@@ -34,5 +34,6 @@
     <orderEntry type="library" name="protobuf" level="project" />
     <orderEntry type="library" name="javaslang" level="project" />
     <orderEntry type="library" name="kotlinx-coroutines-core" level="project" />
+    <orderEntry type="library" name="javascript-debugger" level="project" />
   </component>
 </module>
